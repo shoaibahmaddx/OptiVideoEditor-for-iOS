@@ -12,6 +12,7 @@ import UIKit
 class CollectionViewMenuCell: UICollectionViewCell {
 
     @IBOutlet weak var imgvw_Menu: UIImageView!
+    @IBOutlet weak var lbl_Menu: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

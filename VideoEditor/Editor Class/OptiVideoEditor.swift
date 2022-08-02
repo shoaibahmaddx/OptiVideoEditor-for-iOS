@@ -670,8 +670,8 @@ class OptiVideoEditor: NSObject {
             
             let textWidth = renderWidth / 5
             let textX = renderWidth * CGFloat(5 * (position % 3)) / 12
-            let textY = renderHeight * CGFloat(position / 3) / 3
-            textLayer.frame = CGRect(x: textX , y: textY + 20, width: textWidth, height: 50)
+            let textY = renderHeight * CGFloat(position / 3) / 2
+            textLayer.frame = CGRect(x: 0 , y: textY + 20, width: parentlayer.frame.width, height: 50)
             textLayer.opacity = 0.6
             parentlayer.addSublayer(textLayer)
         }

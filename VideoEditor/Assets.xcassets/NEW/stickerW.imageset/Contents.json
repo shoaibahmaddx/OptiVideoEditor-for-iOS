@@ -1,23 +1,23 @@
 {
   "images" : [
     {
+      "filename" : "ph_sticker.png",
       "idiom" : "universal",
-      "filename" : "icons8-sticker-filled-50.png",
       "scale" : "1x"
     },
     {
+      "filename" : "ph_sticker@2x.png",
       "idiom" : "universal",
-      "filename" : "icons8-sticker-filled-51.png",
       "scale" : "2x"
     },
     {
+      "filename" : "ph_sticker@3x.png",
       "idiom" : "universal",
-      "filename" : "icons8-sticker-filled-52.png",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }

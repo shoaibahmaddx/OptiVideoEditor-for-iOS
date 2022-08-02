@@ -119,7 +119,7 @@ class OptiViewController: UIViewController {
     @IBOutlet weak var videoFrames_Vw: UIView!
     
     // Array Declartion
-    var menuItems = ["filterW","cropW","audiomergeW","speedW","textW","stickerW", "videomergeW", "transitionW"]
+    var menuItems: [MenuItem] = [MenuItem(title: "Text", image: "textW"), MenuItem(title: "Edit", image: "filterW"), MenuItem(title: "Sticker", image: "stickerW"), MenuItem(title: "Trim", image: "cropW")]
     
     var filterNames = ["Luminance","Chrome","Fade","Instant","Noir","Process","Tonal","Transfer","SepiaTone","ColorClamp","ColorInvert","ColorMonochrome","SpotLight","ColorPosterize","BoxBlur","DiscBlur","GaussianBlur","MaskedVariableBlur","MedianFilter","MotionBlur","NoiseReduction"]
     
@@ -161,6 +161,8 @@ class OptiViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(OptiViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(OptiViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+//        loadVideo()
 
     }
     
@@ -442,6 +444,7 @@ class OptiViewController: UIViewController {
                         self.functionViewTopConstraint.constant = 360
                         self.vw_function.layoutIfNeeded()
         }, completion: nil)
+        collectnvw_Menu.isHidden = false
         
     }
     @IBAction func btnAction_SelectVideo(_ sender: UIButton) {
@@ -479,11 +482,13 @@ class OptiViewController: UIViewController {
                         self.assetArray.removeAll()
                         self.audioAsset = nil
                         self.progressvw_back.isHidden = true
+                        self.collectnvw_Menu.isHidden = false
                     }
                 }) { (error) in
                     DispatchQueue.main.async {
                         OptiToast.showNegativeMessage(message: error ?? "")
                         self.progressvw_back.isHidden = true
+                        self.collectnvw_Menu.isHidden = false
                     }
                 }
             } else {
@@ -511,11 +516,13 @@ class OptiViewController: UIViewController {
                                 self.slctVideoUrl = url
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }) { (error) in
                             DispatchQueue.main.async {
                                 OptiToast.showNegativeMessage(message: error ?? "")
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }
                     }
@@ -540,11 +547,13 @@ class OptiViewController: UIViewController {
                                 self.progress_Vw.progress = 1.0
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }) { (error) in
                             DispatchQueue.main.async {
                                 OptiToast.showNegativeMessage(message: error ?? "")
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }
                     }
@@ -568,11 +577,13 @@ class OptiViewController: UIViewController {
                                 self.slctVideoUrl = url
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }){ (error) in
                             DispatchQueue.main.async {
                                 OptiToast.showNegativeMessage(message: error ?? "")
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }
                     }else if txtfld_Addtxt.text == "" {
@@ -607,11 +618,13 @@ class OptiViewController: UIViewController {
                                 //  self.cropView.isHidden = true
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }){ (error) in
                             DispatchQueue.main.async {
                                 OptiToast.showNegativeMessage(message: error ?? "")
                                 self.progressvw_back.isHidden = true
+                                self.collectnvw_Menu.isHidden = false
                             }
                         }
                     }else if strSelectedSticker == "" {
@@ -755,6 +768,20 @@ class OptiViewController: UIViewController {
             }
         }
     }
+    
+    private func loadVideo() {
+        let videoUrl = URL(fileURLWithPath: "/private/var/mobile/Containers/Data/Application/D728D55B-5939-418B-9C1D-34B5F5EBF60E/tmp/D2A8B0FE-E56C-40D7-801B-AB6F3364C6DC.MOV")
+        
+        self.btn_selectVideo.isHidden = true
+        self.vw_selectvideo.isHidden = true
+        let asset = AVAsset(url: videoUrl)
+        let duration = asset.duration
+        let durationTime = CMTimeGetSeconds(duration)
+        self.videoTotalsec = durationTime
+        self.slctVideoUrl = videoUrl
+        self.thumImg = OptiVideoEditor().generateThumbnail(path: videoUrl)
+        self.addVideoPlayer(videoUrl: videoUrl, to: video_vw)
+    }
 }
 
 //MARK : UIImagePicker Delegate
@@ -841,7 +868,8 @@ extension OptiViewController : UICollectionViewDataSource, UICollectionViewDeleg
         switch collectionView.tag {
         case 1:
             let cell: CollectionViewMenuCell = collectionView.dequeueReusableCell(withReuseIdentifier: OptiConstant().CMenuCell, for: indexPath) as! CollectionViewMenuCell
-            cell.imgvw_Menu.image = UIImage(named:menuItems[indexPath.row])
+            cell.imgvw_Menu.image = UIImage(named: menuItems[indexPath.row].image)
+            cell.lbl_Menu.text = menuItems[indexPath.row].title
             return cell
         case 2:
             let cell: EffectCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: OptiConstant().CEffectCell, for: indexPath) as! EffectCollectionCell
@@ -956,7 +984,7 @@ extension OptiViewController : UICollectionViewDataSource, UICollectionViewDeleg
         } else {
             switch collectionView.tag {
             case 1:
-                return CGSize(width: collectnvw_Menu.frame.width / 7.0, height: collectnvw_Menu.frame.height - 30)
+                return CGSize(width: 48, height: 72)
             case 2:
                 return CGSize(width: effect_CollVw.frame.width / 2.8, height: effect_CollVw.frame.height)
             case 3:
@@ -1008,7 +1036,7 @@ extension OptiViewController : UICollectionViewDelegate {
             case 1:
                 switch indexPath.row {
                     
-                case 0:
+                case 1:
                     // Filter Applied
                     if (self.slctVideoUrl != nil) {
                         self.filterSelcted = 100
@@ -1024,7 +1052,8 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.effect_CollVw.reloadData()
                         
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
-                            self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+                            self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
                         
@@ -1033,7 +1062,7 @@ extension OptiViewController : UICollectionViewDelegate {
                             OptiToast.showNegativeMessage(message: OptiConstant().slctvideofilter)
                         }
                     }
-                case 1:
+                case 3:
                     // crop Video
                     if (self.slctVideoUrl != nil) {
                         self.showCropviewAfterVideoisPicked()
@@ -1047,7 +1076,8 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.vw_AddTextView.isHidden = true
                         self.merge_Musicbacvw.isHidden = true
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
-                            self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+                            self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
                         
@@ -1056,7 +1086,7 @@ extension OptiViewController : UICollectionViewDelegate {
                             OptiToast.showNegativeMessage(message: OptiConstant().slctvideocrop)
                         }
                     }
-                case 2:
+                case 4:
                     //Audio  merge
                     if (self.slctVideoUrl != nil) {
                         self.avplayer.pause()
@@ -1078,7 +1108,7 @@ extension OptiViewController : UICollectionViewDelegate {
                             OptiToast.showNegativeMessage(message: OptiConstant().slctvideomergeaudio)
                         }
                     }
-                case 3:
+                case 5:
                     // SpeedView
                     if (self.slctVideoUrl != nil) {
                         self.avplayer.pause()
@@ -1101,7 +1131,7 @@ extension OptiViewController : UICollectionViewDelegate {
                             OptiToast.showNegativeMessage(message: OptiConstant().slctvideospeed)
                         }
                     }
-                case 4:
+                case 0:
                     // addTextView
                     if (self.slctVideoUrl != nil) {
                         self.avplayer.pause()
@@ -1115,7 +1145,8 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.merge_Musicbacvw.isHidden = true
                         self.textPosition_Collvw.reloadData()
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
-                            self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+                            self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
                         
@@ -1124,7 +1155,7 @@ extension OptiViewController : UICollectionViewDelegate {
                             OptiToast.showNegativeMessage(message: OptiConstant().slctvideoaddtxt)
                         }
                     }
-                case 5:
+                case 2:
                     // addStickerView
                     if (self.slctVideoUrl != nil) {
                         self.avplayer.pause()
@@ -1138,7 +1169,8 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.merge_Musicbacvw.isHidden = true
                         self.sticker_Collvw.reloadData()
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
-                            self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+                            self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
                         
