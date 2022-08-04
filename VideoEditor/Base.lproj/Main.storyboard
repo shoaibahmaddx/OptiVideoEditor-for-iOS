@@ -507,7 +507,7 @@
                                                                     <constraint firstItem="h4u-Sx-p1X" firstAttribute="height" secondItem="aph-ed-1DP" secondAttribute="height" multiplier="0.6" id="o2l-zS-FE1"/>
                                                                 </constraints>
                                                             </view>
-                                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="7" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NOd-gR-XmT">
+                                                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" tag="7" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NOd-gR-XmT">
                                                                 <rect key="frame" x="0.0" y="75" width="375" height="78"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RGW-Mf-oY2">
@@ -522,16 +522,40 @@
                                                                     <outlet property="delegate" destination="BYZ-38-t0r" id="qJA-Dd-hZ5"/>
                                                                 </connections>
                                                             </collectionView>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dyR-qj-rK1">
+                                                                <rect key="frame" x="87" y="75" width="200" height="38"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rrk-z4-5OJ">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="38"/>
+                                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <buttonConfiguration key="configuration" style="plain" title="T"/>
+                                                                        <connections>
+                                                                            <action selector="changeFontButtinTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="weX-5z-1oK"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h71-zm-yjs">
+                                                                        <rect key="frame" x="100" y="0.0" width="100" height="38"/>
+                                                                        <state key="normal" title="Button"/>
+                                                                        <buttonConfiguration key="configuration" style="plain" image="filterW">
+                                                                            <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        </buttonConfiguration>
+                                                                    </button>
+                                                                </subviews>
+                                                            </stackView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="dyR-qj-rK1" secondAttribute="trailing" constant="88" id="8os-47-zkQ"/>
                                                             <constraint firstAttribute="trailing" secondItem="aph-ed-1DP" secondAttribute="trailing" id="Vx1-zb-oEh"/>
                                                             <constraint firstItem="aph-ed-1DP" firstAttribute="top" secondItem="bMd-Lb-8rj" secondAttribute="top" id="Xi0-vm-sac"/>
                                                             <constraint firstItem="NOd-gR-XmT" firstAttribute="leading" secondItem="bMd-Lb-8rj" secondAttribute="leading" id="cd0-Lc-e3v"/>
                                                             <constraint firstAttribute="trailing" secondItem="NOd-gR-XmT" secondAttribute="trailing" id="cq9-k3-j3j"/>
                                                             <constraint firstItem="NOd-gR-XmT" firstAttribute="top" secondItem="aph-ed-1DP" secondAttribute="bottom" constant="5" id="hoU-DD-lqa"/>
+                                                            <constraint firstItem="dyR-qj-rK1" firstAttribute="leading" secondItem="bMd-Lb-8rj" secondAttribute="leading" constant="87" id="lrb-f4-T3H"/>
                                                             <constraint firstItem="aph-ed-1DP" firstAttribute="leading" secondItem="bMd-Lb-8rj" secondAttribute="leading" id="rvU-Cd-uzp"/>
                                                             <constraint firstAttribute="bottom" secondItem="NOd-gR-XmT" secondAttribute="bottom" constant="10" id="t6r-mx-csd"/>
+                                                            <constraint firstItem="dyR-qj-rK1" firstAttribute="top" secondItem="aph-ed-1DP" secondAttribute="bottom" constant="5" id="uFM-4g-K1D"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
@@ -925,6 +949,7 @@
     <resources>
         <image name="cancel" width="50" height="50"/>
         <image name="closeW" width="25" height="25"/>
+        <image name="filterW" width="24" height="24"/>
         <image name="radio" width="46" height="28"/>
         <image name="tickW" width="25" height="25"/>
     </resources>

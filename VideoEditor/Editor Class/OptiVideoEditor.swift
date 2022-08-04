@@ -1020,4 +1020,145 @@ class OptiVideoEditor: NSObject {
             }
         }
     }
+    
+    func addStickerorTexttoVideo(videoUrl: URL, watermarkLabel label: UILabel, parentFrame: CGRect, success: @escaping ((URL) -> Void), failure: @escaping ((String?) -> Void)) {
+        
+        
+            
+            let asset = AVURLAsset.init(url: videoUrl)
+            
+            let composition = AVMutableComposition.init()
+            composition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            let clipVideoTrack = asset.tracks(withMediaType: AVMediaType.video)[0]
+            
+            // Rotate to potrait
+            let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
+            let videoTransform:CGAffineTransform = clipVideoTrack.preferredTransform
+            
+            
+            //fix orientation
+            var videoAssetOrientation  = UIImage.Orientation.up
+            
+            var isVideoAssetPortrait  = false
+            
+            if videoTransform.a == 0 && videoTransform.b == 1.0 && videoTransform.c == -1.0 && videoTransform.d == 0 {
+                videoAssetOrientation = UIImage.Orientation.right
+                isVideoAssetPortrait = true
+            }
+            if videoTransform.a == 0 && videoTransform.b == -1.0 && videoTransform.c == 1.0 && videoTransform.d == 0 {
+                videoAssetOrientation =  UIImage.Orientation.left
+                isVideoAssetPortrait = true
+            }
+            if videoTransform.a == 1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == 1.0 {
+                videoAssetOrientation =  UIImage.Orientation.up
+            }
+            if videoTransform.a == -1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == -1.0 {
+                videoAssetOrientation = UIImage.Orientation.down;
+            }
+            
+            
+            transformer.setTransform(clipVideoTrack.preferredTransform, at: CMTime.zero)
+            transformer.setOpacity(0.0, at: asset.duration)
+            
+            
+            
+            
+            //adjust the render size if neccessary
+            var naturalSize: CGSize
+            if(isVideoAssetPortrait){
+                naturalSize = CGSize(width: clipVideoTrack.naturalSize.height, height: clipVideoTrack.naturalSize.width)
+            } else {
+                naturalSize = clipVideoTrack.naturalSize;
+            }
+            
+            var renderWidth: CGFloat!
+            var renderHeight: CGFloat!
+            
+            renderWidth = naturalSize.width
+            renderHeight = naturalSize.height
+            
+            let parentlayer = CALayer()
+            let videoLayer = CALayer()
+            let watermarkLayer = CALayer()
+            
+            let videoComposition = AVMutableVideoComposition()
+            videoComposition.renderSize = CGSize(width: renderWidth, height: renderHeight)
+            videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
+            videoComposition.renderScale = 1.0
+            
+            parentlayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: naturalSize)
+            videoLayer.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: naturalSize)
+            parentlayer.addSublayer(videoLayer)
+            
+        if label.text != "" {
+                        
+            let labelPosXInParent = (label.frame.minX / parentFrame.maxX) * parentlayer.frame.maxX
+            let labelPosYInParent = (label.frame.minY / parentFrame.maxY) * parentlayer.frame.maxY
+            
+            let textLayer = CATextLayer()
+            textLayer.string = label.text
+            textLayer.font = CTFontCopyGraphicsFont(label.font, nil)
+            textLayer.fontSize = label.font.pointSize * 2
+            let size = textLayer.preferredFrameSize()
+//            textLayer.frame = CGRect(x: 290.88, y: 648.163, width: size.width, height: label.frame.height)
+            var y: CGFloat = parentlayer.frame.maxY - (labelPosYInParent + size.height)
+            if y < 0 {
+                y = 0
+            } else if y > parentlayer.frame.maxY {
+                y = parentlayer.frame.maxY
+            }
+            textLayer.frame = CGRect(x: labelPosXInParent, y: y, width: size.width, height: size.height)
+            textLayer.opacity = 0.6
+            textLayer.alignmentMode = CATextLayerAlignmentMode.center
+            textLayer.contentsScale = UIScreen.main.scale
+            parentlayer.addSublayer(textLayer)
+        }
+            
+            //Create Directory path for Save
+            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            var outputURL = documentDirectory.appendingPathComponent("StickerVideo")
+            do {
+                try FileManager.default.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+                outputURL = outputURL.appendingPathComponent("\(outputURL.lastPathComponent).m4v")
+            }catch let error {
+                print(error)
+            }
+            
+            //Remove existing file
+            self.deleteFile(outputURL)
+
+        // Add watermark to video
+            videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayers: [videoLayer], in: parentlayer)
+            
+            let instruction = AVMutableVideoCompositionInstruction()
+            instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(60, preferredTimescale: 30))
+            
+            instruction.layerInstructions = [transformer]
+            videoComposition.instructions = [instruction]
+            
+            let exporter = AVAssetExportSession.init(asset: asset, presetName: AVAssetExportPresetHighestQuality)
+            exporter?.outputFileType = AVFileType.mov
+            exporter?.outputURL = outputURL
+            exporter?.videoComposition = videoComposition
+            
+            exporter!.exportAsynchronously(completionHandler: {() -> Void in
+                
+                switch exporter!.status {
+                case .completed :
+                    success(outputURL)
+                case .failed:
+                    if let _error = exporter?.error?.localizedDescription {
+                        failure(_error)
+                    }
+                case .cancelled:
+                    if let _error = exporter?.error?.localizedDescription {
+                        failure(_error)
+                    }
+                default:
+                    if let _error = exporter?.error?.localizedDescription {
+                        failure(_error)
+                    }
+                }
+            })
+    }
 }

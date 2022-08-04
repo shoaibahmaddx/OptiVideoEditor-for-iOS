@@ -47,5 +47,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Playball.ttf</string>
+		<string>AlexBrush-Regular.ttf</string>
+		<string>JosefinSans-Regular.ttf</string>
+		<string>LittleLordFontleroyNF.ttf</string>
+		<string>KrinkesRegularPERSONAL.ttf</string>
+	</array>
 </dict>
 </plist>

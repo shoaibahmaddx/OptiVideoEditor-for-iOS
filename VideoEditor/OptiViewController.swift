@@ -61,6 +61,9 @@ class OptiViewController: UIViewController {
     //rangeSlider
     var rangeSlider: SlickRangeSlider! = nil
     
+    //Label for displaying text
+    var overlayLabel: UILabel?
+    
     //MARK: IBOutlets
     @IBOutlet weak var collectnvw_Menu: UICollectionView!
     @IBOutlet weak var video_vw: UIView!
@@ -128,6 +131,10 @@ class OptiViewController: UIViewController {
     var positionItems = ["BottomLeft","BottomCenter","BottomRight","CenterLeft","Center","CenterRight","TopLeft","TopCenter","TopRight"]
     
     var transitionItems = ["Right to Left","Left to Right","Top to Bottom","Bottom to Top", "Lefttop to Rightbottom","Rightbottom to Lefttop", "Fade in/out"]
+    
+    var fonts = ["AlexBrush-Regular", "KrinkesRegularPERSONAL", "JosefinSans-Regular", "LittleLordFontleroyNF", "Playball"]
+    
+    var selectedFontIndex = 0
 
     //Mark: ViewController Life Cycle
     override func viewDidLoad() {
@@ -441,8 +448,11 @@ class OptiViewController: UIViewController {
         txtfld_Addtxt.resignFirstResponder()
         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear],
                        animations: {
-                        self.functionViewTopConstraint.constant = 360
-                        self.vw_function.layoutIfNeeded()
+            self.functionViewTopConstraint.constant = 360
+            self.constraintvideovw_Height.constant = 0
+            self.overlayLabel?.removeFromSuperview()
+            self.overlayLabel = nil
+            self.vw_function.layoutIfNeeded()
         }, completion: nil)
         collectnvw_Menu.isHidden = false
         
@@ -483,6 +493,7 @@ class OptiViewController: UIViewController {
                         self.audioAsset = nil
                         self.progressvw_back.isHidden = true
                         self.collectnvw_Menu.isHidden = false
+                        self.constraintvideovw_Height.constant = 0
                     }
                 }) { (error) in
                     DispatchQueue.main.async {
@@ -517,6 +528,7 @@ class OptiViewController: UIViewController {
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
                                 self.collectnvw_Menu.isHidden = false
+                                self.constraintvideovw_Height.constant = 0
                             }
                         }) { (error) in
                             DispatchQueue.main.async {
@@ -548,6 +560,7 @@ class OptiViewController: UIViewController {
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
                                 self.collectnvw_Menu.isHidden = false
+                                self.constraintvideovw_Height.constant = 0
                             }
                         }) { (error) in
                             DispatchQueue.main.async {
@@ -561,7 +574,7 @@ class OptiViewController: UIViewController {
             }else if vw_AddTextView.isHidden == false {
                 self.avplayer.pause()
                 if let videourl = self.slctVideoUrl {
-                    if selectedTextPosition != -1 && txtfld_Addtxt.text != "" {
+                    if txtfld_Addtxt.text != "" {
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear],animations: {
                             self.functionViewTopConstraint.constant = 360
                             self.vw_function.layoutIfNeeded()
@@ -569,7 +582,7 @@ class OptiViewController: UIViewController {
                         self.progressvw_back.isHidden = false
                         self.progress_Vw.progress = 0.1
                         self.setTimer()
-                        OptiVideoEditor().addStickerorTexttoVideo(videoUrl: videourl, watermarkText: txtfld_Addtxt.text ?? "", imageName: "", position: selectedTextPosition, success: { (url) in
+                        OptiVideoEditor().addStickerorTexttoVideo(videoUrl: videourl, watermarkLabel: overlayLabel!, parentFrame: video_vw.frame, success: { (url) in
                             DispatchQueue.main.async {
                                 let saveBarBtnItm = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(self.saveActionforEditedVideo))
                                 self.navigationItem.rightBarButtonItem  = saveBarBtnItm
@@ -578,6 +591,9 @@ class OptiViewController: UIViewController {
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
                                 self.collectnvw_Menu.isHidden = false
+                                self.constraintvideovw_Height.constant = 0
+                                self.overlayLabel?.removeFromSuperview()
+                                self.overlayLabel = nil
                             }
                         }){ (error) in
                             DispatchQueue.main.async {
@@ -619,6 +635,7 @@ class OptiViewController: UIViewController {
                                 self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                                 self.progressvw_back.isHidden = true
                                 self.collectnvw_Menu.isHidden = false
+                                self.constraintvideovw_Height.constant = 0
                             }
                         }){ (error) in
                             DispatchQueue.main.async {
@@ -662,6 +679,7 @@ class OptiViewController: UIViewController {
                             self.videoTotalsec = durationTime
                             self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                             self.progressvw_back.isHidden = true
+                            self.constraintvideovw_Height.constant = 0
                         }
                     }){ (error) in
                         DispatchQueue.main.async {
@@ -689,6 +707,7 @@ class OptiViewController: UIViewController {
                             self.slctVideoUrl = url
                             self.addVideoPlayer(videoUrl: url, to: self.video_vw)
                             self.progressvw_back.isHidden = true
+                            self.constraintvideovw_Height.constant = 0
                         }
                     }) { (error) in
                         DispatchQueue.main.async {
@@ -781,6 +800,16 @@ class OptiViewController: UIViewController {
         self.slctVideoUrl = videoUrl
         self.thumImg = OptiVideoEditor().generateThumbnail(path: videoUrl)
         self.addVideoPlayer(videoUrl: videoUrl, to: video_vw)
+    }
+    @IBAction func changeFontButtinTapped(_ button: UIButton) {
+        selectedFontIndex += 1
+        if selectedFontIndex >= fonts.count {
+            selectedFontIndex = 0
+        }
+        
+        let font = UIFont(name: "\(fonts[selectedFontIndex])", size: 40)
+        overlayLabel?.font = font
+        button.titleLabel?.font = font
     }
 }
 
@@ -1053,6 +1082,7 @@ extension OptiViewController : UICollectionViewDelegate {
                         
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
                             self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            self.constraintvideovw_Height.constant = self.vw_function.frame.height * -1
                             collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
@@ -1077,6 +1107,7 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.merge_Musicbacvw.isHidden = true
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
                             self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            self.constraintvideovw_Height.constant = self.vw_function.frame.height * -1
                             collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
@@ -1146,9 +1177,11 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.textPosition_Collvw.reloadData()
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
                             self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            self.constraintvideovw_Height.constant = self.vw_function.frame.height * -1
                             collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
+                        addLabel(to: self.video_vw)
                         
                     }else{
                         DispatchQueue.main.async {
@@ -1170,6 +1203,7 @@ extension OptiViewController : UICollectionViewDelegate {
                         self.sticker_Collvw.reloadData()
                         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
                             self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
+                            self.constraintvideovw_Height.constant = self.vw_function.frame.height * -1
                             collectionView.isHidden = true
                             self.vw_function.layoutIfNeeded()
                         }, completion: nil)
@@ -1276,6 +1310,48 @@ extension OptiViewController : UICollectionViewDelegate {
             }
         }
     }
+    
+    private func addLabel(to view: UIView) {
+        overlayLabel = UILabel(frame: CGRect(x: view.frame.midX, y: view.frame.midY, width: 0, height: 0))
+        overlayLabel?.isUserInteractionEnabled = true
+        overlayLabel?.font = UIFont.systemFont(ofSize: 40)
+        overlayLabel?.textColor = .white
+        view.addSubview(overlayLabel!)
+        overlayLabel?.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            overlayLabel!.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            overlayLabel!.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+//        ])
+        overlayLabel?.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(overlayViewDragged(_:))))
+    }
+    
+    @objc func overlayViewDragged(_ gestureRecognizer: UIPanGestureRecognizer) {
+        guard let view = gestureRecognizer.view?.superview else { return }
+        let translation = gestureRecognizer.translation(in: view)
+        let selectedLabel = gestureRecognizer.view!
+        
+        selectedLabel.center = CGPoint(x: selectedLabel.center.x + translation.x,
+                                       y: selectedLabel.center.y + translation.y)
+        
+        let videoViewBounds = view.frame
+        
+        if selectedLabel.frame.maxX > videoViewBounds.maxX {
+            selectedLabel.center = CGPoint(x: selectedLabel.center.x - (selectedLabel.frame.maxX - videoViewBounds.maxX), y: selectedLabel.center.y)
+        }
+        if selectedLabel.frame.minX < videoViewBounds.minX {
+            selectedLabel.center = CGPoint(x: selectedLabel.center.x + (-selectedLabel.frame.minX + videoViewBounds.minX), y: selectedLabel.center.y)
+        }
+        
+        if selectedLabel.frame.maxY > view.frame.maxY {
+            selectedLabel.center = CGPoint(x: selectedLabel.center.x, y: selectedLabel.center.y - (selectedLabel.frame.maxY - view.frame.maxY))
+        }
+        if selectedLabel.frame.minY < view.frame.minY {
+            selectedLabel.center = CGPoint(x: selectedLabel.center.x, y: selectedLabel.center.y + (-selectedLabel.frame.minY + view.frame.minY))
+        }
+        
+        gestureRecognizer.setTranslation(CGPoint.zero, in: view)
+        
+    }
 }
 
 
@@ -1313,9 +1389,11 @@ extension OptiViewController : UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField){
         activeField = textField
+        activeField?.addTarget(self, action: #selector(textFieldDidChangeText(_:)), for: .editingChanged)
         textField.becomeFirstResponder()
     }
     func textFieldDidEndEditing(_ textField: UITextField){
+        activeField?.removeTarget(self, action: #selector(textFieldDidChangeText(_:)), for: .editingChanged)
         activeField = nil
         textField.resignFirstResponder()
 
@@ -1328,7 +1406,7 @@ extension OptiViewController : UITextFieldDelegate {
     @objc func keyboardWillShow(notification: NSNotification) {
         if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear],animations: {
-                self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+                self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
                 self.vw_function.layoutIfNeeded()
             }, completion: nil)
         }
@@ -1336,9 +1414,15 @@ extension OptiViewController : UITextFieldDelegate {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],animations: {
-            self.functionViewTopConstraint.constant = self.menu_Vw.frame.height * -1
+            self.functionViewTopConstraint.constant = self.vw_function.frame.height * -1
             self.vw_function.layoutIfNeeded()
         }, completion: nil)
+    }
+    
+    @objc func textFieldDidChangeText(_ textField: UITextField) {
+        if let text = textField.text {
+            overlayLabel?.text = text
+        }
     }
 }
 

@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		089AF0092898057C00F33323 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089AF0082898057C00F33323 /* MenuItem.swift */; };
+		089AF00C289AB38200F33323 /* KrinkesRegularPERSONAL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 089AF00B289AB38200F33323 /* KrinkesRegularPERSONAL.ttf */; };
+		089AF00E289AB38C00F33323 /* AlexBrush-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 089AF00D289AB38C00F33323 /* AlexBrush-Regular.ttf */; };
+		089AF010289AB39C00F33323 /* JosefinSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 089AF00F289AB39C00F33323 /* JosefinSans-Regular.ttf */; };
+		089AF012289AB3AF00F33323 /* LittleLordFontleroyNF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 089AF011289AB3AF00F33323 /* LittleLordFontleroyNF.ttf */; };
+		089AF014289AB3B800F33323 /* Playball.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 089AF013289AB3B800F33323 /* Playball.ttf */; };
 		58105A3E2254C43F00145032 /* OptiAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58105A3D2254C43F00145032 /* OptiAppDelegate.swift */; };
 		58105A402254C43F00145032 /* OptiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58105A3F2254C43F00145032 /* OptiViewController.swift */; };
 		58105A432254C43F00145032 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58105A412254C43F00145032 /* Main.storyboard */; };
@@ -38,6 +43,11 @@
 
 /* Begin PBXFileReference section */
 		089AF0082898057C00F33323 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
+		089AF00B289AB38200F33323 /* KrinkesRegularPERSONAL.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = KrinkesRegularPERSONAL.ttf; sourceTree = "<group>"; };
+		089AF00D289AB38C00F33323 /* AlexBrush-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AlexBrush-Regular.ttf"; sourceTree = "<group>"; };
+		089AF00F289AB39C00F33323 /* JosefinSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JosefinSans-Regular.ttf"; sourceTree = "<group>"; };
+		089AF011289AB3AF00F33323 /* LittleLordFontleroyNF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LittleLordFontleroyNF.ttf; sourceTree = "<group>"; };
+		089AF013289AB3B800F33323 /* Playball.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Playball.ttf; sourceTree = "<group>"; };
 		58105A3A2254C43F00145032 /* Marvel Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Marvel Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58105A3D2254C43F00145032 /* OptiAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptiAppDelegate.swift; sourceTree = "<group>"; };
 		58105A3F2254C43F00145032 /* OptiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptiViewController.swift; sourceTree = "<group>"; };
@@ -89,6 +99,18 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		089AF00A289AB35D00F33323 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				089AF00D289AB38C00F33323 /* AlexBrush-Regular.ttf */,
+				089AF00B289AB38200F33323 /* KrinkesRegularPERSONAL.ttf */,
+				089AF00F289AB39C00F33323 /* JosefinSans-Regular.ttf */,
+				089AF011289AB3AF00F33323 /* LittleLordFontleroyNF.ttf */,
+				089AF013289AB3B800F33323 /* Playball.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		58105A312254C43F00145032 = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +131,7 @@
 		58105A3C2254C43F00145032 /* VideoEditor */ = {
 			isa = PBXGroup;
 			children = (
+				089AF00A289AB35D00F33323 /* Fonts */,
 				089AF0072898056700F33323 /* Model */,
 				6C9F49B022C20BE10054802A /* Custome Font */,
 				6C9630E722F3FF3200BF3C7D /* Toast */,
@@ -268,9 +291,14 @@
 				58105A482254C45000145032 /* LaunchScreen.storyboard in Resources */,
 				6C9F49B622C20C0B0054802A /* Maple-Regular.otf in Resources */,
 				6C9DCBE522C34F9F00890F6D /* SpeedCollectionCell.xib in Resources */,
+				089AF00E289AB38C00F33323 /* AlexBrush-Regular.ttf in Resources */,
 				6C9F49B722C20C0B0054802A /* Maple-Medium.otf in Resources */,
+				089AF00C289AB38200F33323 /* KrinkesRegularPERSONAL.ttf in Resources */,
+				089AF014289AB3B800F33323 /* Playball.ttf in Resources */,
+				089AF012289AB3AF00F33323 /* LittleLordFontleroyNF.ttf in Resources */,
 				6C8C8C4522C22C43003E648E /* CollectionViewMenuCell.xib in Resources */,
 				58105A452254C45000145032 /* Assets.xcassets in Resources */,
+				089AF010289AB39C00F33323 /* JosefinSans-Regular.ttf in Resources */,
 				6C8C8C4E22C25D10003E648E /* EffectCollectionCell.xib in Resources */,
 				58105A432254C43F00145032 /* Main.storyboard in Resources */,
 			);
